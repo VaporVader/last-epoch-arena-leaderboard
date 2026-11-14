@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last Epoch Arena Beastmaster Challenge - Tierschutzverein Dresden</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cinzel & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        le: {
+                            bg: '#07090e',
+                            card: '#0f141d',
+                            border: '#263347',
+                            gold: '#dfb239',
+                            goldHover: '#f8ca4d',
+                            primal: '#22c55e',
+                            primalGlow: '#15803d',
+                            arena: '#f97316',
+                            catPink: '#ec4899',
+                            catAmber: '#f59e0b',
+                            textMuted: '#94a3b8',
+                        }
+                    },
+                    boxShadow: {
+                        'rune': '0 0 18px rgba(34, 197, 94, 0.35)',
+                        'gold-glow': '0 0 22px rgba(223, 178, 57, 0.45)',
+                        'cat-glow': '0 0 20px rgba(236, 72, 153, 0.3)',
+                        'arena-glow': '0 0 20px rgba(249, 115, 22, 0.35)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Dark Fantasy Background with Paw & Rune Vibes */
+        body {
+            background-color: #07090e;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 10% 30%, rgba(236, 72, 153, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 70%, rgba(249, 115, 22, 0.06) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h80v80H0z' fill='none'/%3E%3Cpath d='M20 20l5 5m10-5l-5 5m35 15l5 5m10-5l-5 5' stroke='%231e293b' stroke-width='1' stroke-opacity='0.15'/%3E%3C/svg%3E");
+        }
+
+        .le-panel {
+            background: linear-gradient(155deg, rgba(17, 23, 34, 0.96), rgba(9, 12, 18, 0.98));
+            border: 1px solid #263347;
+            position: relative;
+        }
+
+        .le-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(223, 178, 57, 0.6), rgba(34, 197, 94, 0.6), transparent);
+        }
+
+        .le-title-glow {
+            text-shadow: 0 0 25px rgba(223, 178, 57, 0.35);
+        }
+
+        /* Rank Badges */
+        .rank-1 {
+            background: linear-gradient(135deg, rgba(223, 178, 57, 0.22), rgba(255, 215, 0, 0.04));
+            border-color: #dfb239 !important;
+            box-shadow: inset 0 0 15px rgba(223, 178, 57, 0.2);
+        }
+        .rank-2 {
+            background: linear-gradient(135deg, rgba(203, 213, 225, 0.15), rgba(255, 255, 255, 0.02));
+            border-color: #cbd5e1 !important;
+        }
+        .rank-3 {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.18), rgba(255, 160, 122, 0.02));
+            border-color: #d97706 !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07090e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #263347;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #dfb239;
+        }
+    </style>
+</head>
+<body class="text-gray-200 font-sans min-h-screen flex flex-col justify-between selection:bg-le-primal selection:text-black">
+
+    <!-- TOP ANNOUNCEMENT BAR / CHARITY BANNER (KATZENHÄUSER) -->
+    <header class="bg-gradient-to-r from-emerald-950 via-slate-950 to-amber-950 border-b border-le-border py-4 px-4 sm:px-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-pink-500/10 via-emerald-500/10 to-transparent pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
+            <!-- Charity Info -->
+            <div class="flex items-center gap-4 text-center md:text-left">
+                <div class="w-14 h-14 rounded-full bg-slate-900 border-2 border-le-gold flex items-center justify-center shrink-0 shadow-gold-glow relative">
+                    <i class="fa-solid fa-cat text-2xl text-le-gold"></i>
+                    <span class="absolute -bottom-1 -right-1 text-xs bg-emerald-600 text-black font-extrabold rounded-full px-1.5 py-0.2 border border-slate-900 shadow">
+                        <i class="fa-solid fa-heart"></i>
+                    </span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 justify-center md:justify-start">
+                        <span class="bg-gradient-to-r from-pink-900/80 to-purple-900/80 text-pink-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-pink-500/40 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-paw text-[10px]"></i> Spendenprojekt Katzenhäuser
+                        </span>
+                        <span class="text-emerald-400 text-xs font-semibold"><i class="fa-solid fa-shield-halved mr-1"></i>Tierschutzverein Dresden e.V.</span>
+                    </div>
+                    <h2 class="text-lg sm:text-xl font-cinzel font-bold text-white tracking-wide mt-1">
+                        <span class="text-le-gold">Unterstütze unsere Katzenhäuser!</span>
+                    </h2>
+                    <p class="text-xs text-gray-300 mt-0.5">
+                        Wir kämpfen gemeinsam für ein warmes Zuhause & Pflege aller Tierheim-Katzen in Dresden.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="w-full md:w-auto flex justify-center md:justify-end shrink-0">
+                <button onclick="openDonateModal()" class="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-amber-500 via-le-gold to-yellow-400 hover:from-yellow-400 hover:to-amber-300 text-slate-950 font-cinzel font-black tracking-wider rounded-lg border border-yellow-200 shadow-gold-glow hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2.5 whitespace-nowrap">
+                    <i class="fa-solid fa-cat text-lg text-slate-950"></i>
+                    <span>SPENDE FÜR KATZENHÄUSER</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+
+        <!-- HERO TITLE AREA -->
+        <div class="text-center mb-10 relative">
+            <div class="inline-block relative">
+                <!-- Playful background paw icon -->
+                <i class="fa-solid fa-paw text-emerald-500/10 text-9xl absolute -top-12 left-1/2 -translate-x-1/2 pointer-events-none select-none blur-xs"></i>
+                
+                <div class="flex items-center justify-center gap-2 mb-2 text-xs sm:text-sm font-cinzel text-le-gold font-bold uppercase tracking-widest">
+                    <i class="fa-solid fa-shield-cat"></i> Community Charity Event <i class="fa-solid fa-shield-cat"></i>
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-cinzel font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-yellow-100 via-le-gold to-amber-600 le-title-glow">
+                    LAST EPOCH ARENA
+                </h1>
+
+                <div class="text-lg sm:text-2xl font-cinzel font-extrabold text-emerald-400 tracking-widest mt-1 uppercase flex items-center justify-center gap-3">
+                    <span class="h-0.5 w-8 sm:w-16 bg-gradient-to-r from-transparent to-emerald-500"></span>
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-wand-sparkles text-le-gold text-base"></i>
+                        Beastmaster Challenge
+                        <i class="fa-solid fa-wand-sparkles text-le-gold text-base"></i>
+                    </span>
+                    <span class="h-0.5 w-8 sm:w-16 bg-gradient-to-l from-transparent to-emerald-500"></span>
+                </div>
+            </div>
+
+            <!-- Challenge Description -->
+            <div class="max-w-3xl mx-auto bg-slate-950/80 border border-slate-800/80 p-4 rounded-xl mt-4 shadow-xl">
+                <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                    Alle Teilnehmer stellen ihr Können als <strong class="text-emerald-400">Beastmaster</strong> unter Beweis! 
+                    Für je <strong class="text-le-gold font-bold">100 volle erreichte Arena-Wellen</strong> aller Beastmaster zusammen spendet Veranstalter 
+                    <strong class="text-amber-400 font-bold">VaporVader 1 €</strong> an das Projekt <em class="text-pink-300 font-medium">"Unterstütze unsere Katzenhäuser"</em> des <strong>Tierschutzverein Dresden e.V.</strong>!
+                </p>
+            </div>
+        </div>
+
+        <!-- STATS DASHBOARD -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div class="le-panel p-5 rounded-xl text-center border-l-4 border-l-le-primal">
+                <div class="text-xs text-le-textMuted font-semibold uppercase tracking-wider mb-1 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-users text-le-primal"></i> Teilnehmer
+                </div>
+                <div id="stat-total-players" class="text-3xl sm:text-4xl font-cinzel font-black text-white">-</div>
+                <div class="text-xs text-emerald-400/90 mt-1">Aktive Teilnehmer in der Arena</div>
+            </div>
+
+            <div class="le-panel p-5 rounded-xl text-center border-l-4 border-l-le-arena">
+                <div class="text-xs text-le-textMuted font-semibold uppercase tracking-wider mb-1 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-fire text-le-arena"></i> Wellen Gesamt (Spendenbasis)
+                </div>
+                <div id="stat-total-waves" class="text-3xl sm:text-4xl font-cinzel font-black text-white">-</div>
+                <div class="text-xs text-orange-400/90 mt-1">Gewertete Wellen (max. 1.000 pro Teilnehmer)</div>
+            </div>
+
+            <div class="le-panel p-5 rounded-xl text-center border-l-4 border-l-le-gold shadow-gold-glow">
+                <div class="text-xs text-le-textMuted font-semibold uppercase tracking-wider mb-1 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-hand-holding-heart text-le-gold"></i> Spende von VaporVader
+                </div>
+                <div id="stat-calculated-donation" class="text-3xl sm:text-4xl font-cinzel font-black text-le-gold">0 €</div>
+                <div class="text-xs text-amber-300/90 mt-1">1 € pro 100 volle Wellen (Cap: 1.000 / Spieler)</div>
+            </div>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="le-panel p-4 rounded-xl mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full sm:w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                <input type="text" id="search-input" placeholder="Nach Beastmaster suchen..." 
+                    class="w-full bg-slate-950 border border-slate-700/80 rounded-lg pl-10 pr-4 py-2.5 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-le-gold transition-colors">
+            </div>
+
+            <div class="text-xs text-gray-400 flex items-center gap-2">
+                <i class="fa-solid fa-shield-cat text-le-gold"></i>
+                <span>Rangliste sortiert nach den höchsten erreichten Arena-Wellen</span>
+            </div>
+        </div>
+
+        <!-- LEADERBOARD TABLE -->
+        <div class="le-panel rounded-xl overflow-hidden border border-le-border shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-950/90 border-b border-le-border text-xs uppercase text-le-textMuted font-cinzel tracking-wider">
+                            <th class="py-4 px-4 text-center w-24">Rang</th>
+                            <th class="py-4 px-4">Beastmaster / Teilnehmer</th>
+                            <th class="py-4 px-4 text-center">Erreichte Arena Welle</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body" class="divide-y divide-slate-800/60 text-sm">
+                        <!-- Dynamic Rows Generated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div id="no-results" class="hidden p-12 text-center">
+                <i class="fa-solid fa-cat text-5xl text-slate-600 mb-3"></i>
+                <p class="text-gray-400 text-lg font-cinzel">Kein Beastmaster schnurrt in der Liste!</p>
+                <p class="text-xs text-gray-500 mt-1">Versuche einen anderen Suchbegriff.</p>
+            </div>
+        </div>
+
+        <!-- INFO & RULES FOOTNOTE -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-gray-400">
+            <div class="le-panel p-4 rounded-xl border-slate-800">
+                <h4 class="font-cinzel text-le-gold font-bold mb-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-gavel text-sm"></i> Challenge Reglement
+                </h4>
+                <p class="leading-relaxed">Alle Teilnehmer spielen die Klasse <strong>Beastmaster</strong>. Die erreichten Arena-Wellen werden manuell durch den Veranstalter mit Hilfe von <strong>LETools</strong> kontrolliert und verifiziert.</p>
+            </div>
+            <div class="le-panel p-4 rounded-xl border-slate-800">
+                <h4 class="font-cinzel text-pink-400 font-bold mb-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-paw text-sm"></i> Katzenhaus-Formel
+                </h4>
+                <p class="leading-relaxed">Veranstalter <strong>VaporVader</strong> spendet <strong>1 € pro 100 Wellen</strong> (maximal berücksichtigte Wellen: <strong>1.000 pro Teilnehmer</strong>) an das Katzenhaus-Projekt des Tierschutzvereins Dresden e.V.</p>
+            </div>
+            <div class="le-panel p-4 rounded-xl border-slate-800">
+                <h4 class="font-cinzel text-emerald-400 font-bold mb-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-check text-sm"></i> Manuelle Pflege
+                </h4>
+                <p class="leading-relaxed">Die Daten dieser Rangliste werden <strong>manuell nach erfolgreichem Nachweis</strong> durch das Event-Team geprüft und zeitnah aktualisiert.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-le-border py-6 text-center text-xs text-gray-500 mt-12">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="font-cinzel text-gray-400 font-semibold">Last Epoch Arena Beastmaster Challenge &copy; Charity Event</p>
+                <p class="text-gray-600 mt-0.5">Unterstützt den Tierschutzverein Dresden e.V. ("Unterstütze unsere Katzenhäuser"). Inoffizielles Community Event.</p>
+            </div>
+            <div class="flex items-center gap-4 text-base text-gray-400">
+                <a href="https://www.twitch.tv/vaporvader" target="_blank" rel="noopener noreferrer" class="hover:text-le-gold transition-colors" title="VaporVader auf Twitch"><i class="fa-brands fa-twitch"></i></a>
+                <a href="https://discord.gg/6FDGfuXMZm" target="_blank" rel="noopener noreferrer" class="hover:text-le-gold transition-colors" title="Discord Event Server"><i class="fa-brands fa-discord"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- DONATION MODAL (KATZENHÄUSER) -->
+    <div id="donate-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="le-panel w-full max-w-md p-6 rounded-2xl border-2 border-le-gold shadow-gold-glow relative">
+            <button onclick="closeDonateModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-full bg-slate-900 border-2 border-pink-400 flex items-center justify-center mx-auto mb-3 shadow-cat-glow">
+                    <i class="fa-solid fa-cat text-3xl text-pink-400"></i>
+                </div>
+                <h3 class="text-2xl font-cinzel font-black text-white">Katzenhäuser Unterstützen</h3>
+                <p class="text-xs text-gray-300 mt-1.5">
+                    Hilf dem <strong>Tierschutzverein Dresden e.V.</strong> dabei, verlassenen und kranken Katzen ein warmes, sicheres Katzenhaus zu bieten!
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="flex items-center justify-between text-xs mb-1">
+                        <span class="text-gray-400">Begünstigte Organisation:</span>
+                        <span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check"></i> Verifiziert</span>
+                    </div>
+                    <p class="font-bold text-white text-sm">Tierschutzverein Dresden e.V.</p>
+                    <p class="text-xs text-pink-300 mt-0.5"><i class="fa-solid fa-heart mr-1"></i>Projekt: Katzenhäuser Dresden</p>
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="processSimulatedDonation()" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-500 hover:from-emerald-500 hover:to-teal-400 text-slate-950 font-cinzel font-black tracking-wider rounded-lg border border-emerald-300/50 shadow-rune transition-all duration-200 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <span>JETZT DIREKT SPENDEN</span>
+                    </button>
+                    <p class="text-[10px] text-gray-500 text-center mt-2.5">
+                        Du wirst direkt auf die Spendenplattform <strong>betterplace.org</strong> weitergeleitet, um das Katzenhaus-Projekt des Tierschutzverein Dresden e.V. zu unterstützen.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Clean JSON Data structure with verified status
+        const sampleLeaderboardData = {
+            "eventInfo": {
+                "title": "Last Epoch Arena Beastmaster Challenge",
+                "organizer": "VaporVader",
+                "charityTarget": "Tierschutzverein Dresden e.V. - Katzenhäuser"
+            },
+            "participants": [
+                {
+                    "account_name": "KripThePrimal",
+                    "character_name": "SabertoothAlpha",
+                    "arena_wave": 1142,
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "BeastQueenNox",
+                    "character_name": "NoxClaw",
+                    "arena_wave": 889,
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "Zizaran",
+                    "character_name": "ZizCatLord",
+                    "arena_wave": 765,
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "Wudijo",
+                    "character_name": "WudiBeast",
+                    "arena_wave": 641,
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "Steelmage",
+                    "character_name": "SteelPurr",
+                    "arena_wave": 520,
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "Llama8",
+                    "character_name": "LlamaFangs",
+                    "arena_wave": 498,
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "PrimalGamer99",
+                    "character_name": "PrimalRoar",
+                    "arena_wave": 375,
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "EternaSlayer",
+                    "character_name": "EternaPaw",
+                    "arena_wave": 240,
+                    "proof_verified": true
+                }
+            ]
+        };
+
+        let rawData = [];
+        let filteredData = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            setupEventListeners();
+        });
+
+        // Load JSON with fallback
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    processDataset(data);
+                } else {
+                    processDataset(sampleLeaderboardData);
+                }
+            } catch (err) {
+                console.log("Hinweis: Lade eingebettete Fallback-Daten (data.json nicht gefunden).");
+                processDataset(sampleLeaderboardData);
+            }
+        }
+
+        function processDataset(data) {
+            rawData = data.participants || [];
+
+            // Sort by arena_wave descending
+            rawData.sort((a, b) => b.arena_wave - a.arena_wave);
+            
+            // Assign ranks
+            rawData.forEach((player, index) => {
+                player.rank = index + 1;
+            });
+
+            updateDashboardStats();
+            applyFilters();
+        }
+
+        // Render Leaderboard Rows
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboard-body');
+            const noResults = document.getElementById('no-results');
+            tbody.innerHTML = '';
+
+            if (filteredData.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            filteredData.forEach((player) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/80 transition-colors border-b border-slate-800/60";
+
+                let rankClass = "";
+                let rankBadge = `<span class="font-cinzel font-bold text-gray-400 text-base">#${player.rank}</span>`;
+                
+                if (player.rank === 1) {
+                    rankClass = "rank-1";
+                    rankBadge = `<div class="w-9 h-9 rounded-full bg-amber-500/20 border-2 border-le-gold flex items-center justify-center mx-auto shadow-gold-glow">
+                                    <span class="font-cinzel font-black text-le-gold text-base">1</span>
+                                 </div>`;
+                } else if (player.rank === 2) {
+                    rankClass = "rank-2";
+                    rankBadge = `<div class="w-9 h-9 rounded-full bg-slate-400/20 border border-slate-300 flex items-center justify-center mx-auto">
+                                    <span class="font-cinzel font-bold text-slate-300 text-base">2</span>
+                                 </div>`;
+                } else if (player.rank === 3) {
+                    rankClass = "rank-3";
+                    rankBadge = `<div class="w-9 h-9 rounded-full bg-amber-900/20 border border-amber-600 flex items-center justify-center mx-auto">
+                                    <span class="font-cinzel font-bold text-amber-500 text-base">3</span>
+                                 </div>`;
+                }
+
+                tr.innerHTML = `
+                    <td class="py-4 px-4 text-center ${rankClass}">
+                        ${rankBadge}
+                    </td>
+                    <td class="py-4 px-4">
+                        <div class="font-bold text-white flex items-center gap-2 flex-wrap">
+                            <a href="https://www.lastepochtools.com/profile/${encodeURIComponent(player.account_name)}/character/${encodeURIComponent(player.character_name)}" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               title="Last Epoch Tools Profil öffnen (${escapeHtml(player.account_name)})"
+                               class="text-white hover:text-le-gold underline decoration-slate-600 hover:decoration-le-gold underline-offset-4 transition-colors flex items-center gap-1.5 group">
+                                <span>${escapeHtml(player.character_name)}</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-gray-500 group-hover:text-le-gold transition-colors"></i>
+                            </a>
+                            <span class="text-xs text-emerald-400/80 font-normal"><i class="fa-solid fa-paw text-[10px] mr-1"></i>Beastmaster</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-center">
+                        <div class="inline-flex items-center gap-1.5 bg-orange-950/40 border border-le-arena px-4 py-1.5 rounded-full text-le-arena font-cinzel font-bold text-base shadow-arena-glow">
+                            <i class="fa-solid fa-fire text-xs"></i>
+                            <span>Welle ${player.arena_wave}</span>
+                        </div>
+                        ${player.arena_wave > 1000 ? `<div class="text-[10px] text-amber-400/80 mt-1">Spenden-Cap: 1.000 Wellen</div>` : ''}
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Dashboard Stats
+        function updateDashboardStats() {
+            if (rawData.length === 0) return;
+
+            // Total Players
+            document.getElementById('stat-total-players').textContent = rawData.length;
+
+            // Total Waves (capped at 1000 per player for donation calculation)
+            const totalCappedWaves = rawData.reduce((acc, p) => acc + Math.min(p.arena_wave || 0, 1000), 0);
+            document.getElementById('stat-total-waves').textContent = totalCappedWaves.toLocaleString();
+
+            // Calculated Donation (1€ per full 100 waves, max 1000 waves per participant)
+            const fullHundreds = Math.floor(totalCappedWaves / 100);
+            document.getElementById('stat-calculated-donation').textContent = `${fullHundreds} €`;
+        }
+
+        function setupEventListeners() {
+            document.getElementById('search-input').addEventListener('input', applyFilters);
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+
+            filteredData = rawData.filter(player => {
+                const charMatch = (player.character_name || '').toLowerCase().includes(searchTerm);
+                const accMatch = (player.account_name || '').toLowerCase().includes(searchTerm);
+                return charMatch || accMatch;
+            });
+
+            renderLeaderboard();
+        }
+
+        // Modal Controls
+        function openDonateModal() {
+            document.getElementById('donate-modal').classList.remove('hidden');
+        }
+
+        function closeDonateModal() {
+            document.getElementById('donate-modal').classList.add('hidden');
+        }
+
+        function processSimulatedDonation() {
+            // Hier später den konkreten betterplace.org Projekt-Link hinterlegen
+            const donationProjectUrl = 'https://www.betterplace.org/';
+            window.open(donationProjectUrl, '_blank', 'noopener,noreferrer');
+            closeDonateModal();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[m];
+            });
+        }
+    </script>
+</body>
+</html>

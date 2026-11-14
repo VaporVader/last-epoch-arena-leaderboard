@@ -1,0 +1,21 @@
+{
+    "eventInfo": {
+        "title": "Last Epoch Arena Beastmaster Challenge",
+        "organizer": "VaporVader",
+        "charityTarget": "Tierschutzverein Dresden e.V. - Katzenhäuser"
+    },
+    "participants": [
+        {
+            "account_name": "KripThePrimal",
+            "character_name": "SabertoothAlpha",
+            "arena_wave": 1142,
+            "proof_verified": true
+        },
+        {
+            "account_name": "BeastQueenNox",
+            "character_name": "NoxClaw",
+            "arena_wave": 889,
+            "proof_verified": true
+        }
+    ]
+}
