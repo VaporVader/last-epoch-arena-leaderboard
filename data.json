@@ -6,15 +6,9 @@
     },
     "participants": [
         {
-            "account_name": "KripThePrimal",
-            "character_name": "SabertoothAlpha",
-            "arena_wave": 1142,
-            "proof_verified": true
-        },
-        {
-            "account_name": "BeastQueenNox",
-            "character_name": "NoxClaw",
-            "arena_wave": 889,
+            "account_name": "VaporVader",
+            "character_name": "VaderArenaTestChar",
+            "arena_wave": 0,
             "proof_verified": true
         }
     ]
