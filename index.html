@@ -224,7 +224,7 @@
 
             <div class="text-xs text-gray-400 flex items-center gap-2">
                 <i class="fa-solid fa-shield-cat text-le-gold"></i>
-                <span>Rangliste sortiert nach den höchsten erreichten Arena-Wellen</span>
+                <span>Sortiert nach höchsten Arena-Wellen (bei Gleichstand entscheidet der frühere Zeitpunkt)</span>
             </div>
         </div>
 
@@ -236,6 +236,7 @@
                         <tr class="bg-slate-950/90 border-b border-le-border text-xs uppercase text-le-textMuted font-cinzel tracking-wider">
                             <th class="py-4 px-4 text-center w-24">Rang</th>
                             <th class="py-4 px-4">Beastmaster / Teilnehmer</th>
+                            <th class="py-4 px-4 text-center">Letzte Änderung</th>
                             <th class="py-4 px-4 text-center">Erreichte Arena Welle</th>
                         </tr>
                     </thead>
@@ -259,7 +260,7 @@
                 <h4 class="font-cinzel text-le-gold font-bold mb-1.5 flex items-center gap-2">
                     <i class="fa-solid fa-gavel text-sm"></i> Challenge Reglement
                 </h4>
-                <p class="leading-relaxed">Alle Teilnehmer spielen die Klasse <strong>Beastmaster</strong>. Die erreichten Arena-Wellen werden manuell durch den Veranstalter mit Hilfe von <strong>LETools</strong> kontrolliert und verifiziert.</p>
+                <p class="leading-relaxed">Alle Teilnehmer spielen die Klasse <strong>Beastmaster</strong>. Die erreichten Arena-Wellen werden manuell durch den Veranstalter mit Hilfe von <strong>LETools</strong> kontrolliert. Bei <strong>Gleichstand</strong> platziert sich der Teilnehmer höher, der die Wellenanzahl <strong>zuerst</strong> erreicht hat.</p>
             </div>
             <div class="le-panel p-4 rounded-xl border-slate-800">
                 <h4 class="font-cinzel text-pink-400 font-bold mb-1.5 flex items-center gap-2">
@@ -333,7 +334,7 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Clean JSON Data structure with verified status
+        // Embedded JSON Data structure (matches current data.json with timestamps)
         const sampleLeaderboardData = {
             "eventInfo": {
                 "title": "Last Epoch Arena Beastmaster Challenge",
@@ -342,51 +343,10 @@
             },
             "participants": [
                 {
-                    "account_name": "KripThePrimal",
-                    "character_name": "SabertoothAlpha",
-                    "arena_wave": 1142,
-                    "proof_verified": true
-                },
-                {
-                    "account_name": "BeastQueenNox",
-                    "character_name": "NoxClaw",
-                    "arena_wave": 889,
-                    "proof_verified": true
-                },
-                {
-                    "account_name": "Zizaran",
-                    "character_name": "ZizCatLord",
-                    "arena_wave": 765,
-                    "proof_verified": true
-                },
-                {
-                    "account_name": "Wudijo",
-                    "character_name": "WudiBeast",
-                    "arena_wave": 641,
-                    "proof_verified": true
-                },
-                {
-                    "account_name": "Steelmage",
-                    "character_name": "SteelPurr",
-                    "arena_wave": 520,
-                    "proof_verified": true
-                },
-                {
-                    "account_name": "Llama8",
-                    "character_name": "LlamaFangs",
-                    "arena_wave": 498,
-                    "proof_verified": true
-                },
-                {
-                    "account_name": "PrimalGamer99",
-                    "character_name": "PrimalRoar",
-                    "arena_wave": 375,
-                    "proof_verified": true
-                },
-                {
-                    "account_name": "EternaSlayer",
-                    "character_name": "EternaPaw",
-                    "arena_wave": 240,
+                    "account_name": "VaporVader",
+                    "character_name": "FluffyCleverGirl",
+                    "arena_wave": 0,
+                    "last_updated": "2026-11-20T18:00:00Z",
                     "proof_verified": true
                 }
             ]
@@ -419,8 +379,15 @@
         function processDataset(data) {
             rawData = data.participants || [];
 
-            // Sort by arena_wave descending
-            rawData.sort((a, b) => b.arena_wave - a.arena_wave);
+            // Sort by arena_wave descending; tie-breaker: earliest last_updated timestamp wins
+            rawData.sort((a, b) => {
+                if (b.arena_wave !== a.arena_wave) {
+                    return b.arena_wave - a.arena_wave;
+                }
+                const timeA = a.last_updated ? new Date(a.last_updated).getTime() : Number.MAX_SAFE_INTEGER;
+                const timeB = b.last_updated ? new Date(b.last_updated).getTime() : Number.MAX_SAFE_INTEGER;
+                return timeA - timeB;
+            });
             
             // Assign ranks
             rawData.forEach((player, index) => {
@@ -429,6 +396,20 @@
 
             updateDashboardStats();
             applyFilters();
+        }
+
+        // Format ISO timestamp to readable German date/time
+        function formatTimestamp(isoString) {
+            if (!isoString) return '-';
+            const date = new Date(isoString);
+            if (isNaN(date.getTime())) return '-';
+            return date.toLocaleString('de-DE', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) + ' Uhr';
         }
 
         // Render Leaderboard Rows
@@ -485,6 +466,9 @@
                             <span class="text-xs text-emerald-400/80 font-normal"><i class="fa-solid fa-paw text-[10px] mr-1"></i>Beastmaster</span>
                         </div>
                     </td>
+                    <td class="py-4 px-4 text-center text-xs text-gray-400 whitespace-nowrap">
+                        <i class="fa-regular fa-clock text-slate-500 mr-1"></i>${formatTimestamp(player.last_updated)}
+                    </td>
                     <td class="py-4 px-4 text-center">
                         <div class="inline-flex items-center gap-1.5 bg-orange-950/40 border border-le-arena px-4 py-1.5 rounded-full text-le-arena font-cinzel font-bold text-base shadow-arena-glow">
                             <i class="fa-solid fa-fire text-xs"></i>
@@ -540,7 +524,6 @@
         }
 
         function processSimulatedDonation() {
-            // Hier später den konkreten betterplace.org Projekt-Link hinterlegen
             const donationProjectUrl = 'https://www.betterplace.org/de/fundraising-events/58320-last-epoch-arena-spendenaktion-wir-kaempfen-fuer-den-tierschutz?utm_campaign=&utm_medium=&utm_source=Link';
             window.open(donationProjectUrl, '_blank', 'noopener,noreferrer');
             closeDonateModal();
