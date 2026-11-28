@@ -345,8 +345,99 @@
                 {
                     "account_name": "VaporVader",
                     "character_name": "FluffyCleverGirl",
+                    "arena_wave": 150,
+                    "last_updated": "2026-11-21T18:00:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "TriKster",
+                    "character_name": "TriKSchnurrster",
+                    "arena_wave": 201,
+                    "last_updated": "2026-11-21T20:15:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "as69",
+                    "character_name": "GiasingaMietz_S5",
+                    "arena_wave": 41,
+                    "last_updated": "2026-11-21T19:10:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "Kerstiin",
+                    "character_name": "Mietzubishi",
                     "arena_wave": 0,
-                    "last_updated": "2026-11-20T18:00:00Z",
+                    "last_updated": "2026-11-20T18:05:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "JohnMcCole",
+                    "character_name": "JohnMcFluffy",
+                    "arena_wave": 0,
+                    "last_updated": "2026-11-20T18:10:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "Lyron",
+                    "character_name": "SirFluffy_der_Erste",
+                    "arena_wave": 0,
+                    "last_updated": "2026-11-20T18:15:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "DarkoD22",
+                    "character_name": "MeowPawSchnurrMietz",
+                    "arena_wave": 0,
+                    "last_updated": "2026-11-20T18:20:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "z3r0hum4n",
+                    "character_name": "FLUFFYPION",
+                    "arena_wave": 41,
+                    "last_updated": "2026-11-21T21:45:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "Caral85",
+                    "character_name": "CaralMietz",
+                    "arena_wave": 0,
+                    "last_updated": "2026-11-20T18:25:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "sazuu",
+                    "character_name": "MrPawtyMietz",
+                    "arena_wave": 102,
+                    "last_updated": "2026-11-22T09:30:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "itz_Ice",
+                    "character_name": "IceSchnurrtOhneMietz",
+                    "arena_wave": 0,
+                    "last_updated": "2026-11-20T18:30:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "JuniorRun",
+                    "character_name": "BeastMeowster",
+                    "arena_wave": 0,
+                    "last_updated": "2026-11-20T18:35:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "ITSME_BESTI",
+                    "character_name": "Meownnaise",
+                    "arena_wave": 0,
+                    "last_updated": "2026-11-20T18:40:00Z",
+                    "proof_verified": true
+                },
+                {
+                    "account_name": "Nemes1s3",
+                    "character_name": "Pawpeng",
+                    "arena_wave": 0,
+                    "last_updated": "2026-11-20T18:45:00Z",
                     "proof_verified": true
                 }
             ]
@@ -389,9 +480,14 @@
                 return timeA - timeB;
             });
             
-            // Assign ranks
-            rawData.forEach((player, index) => {
-                player.rank = index + 1;
+            // Assign ranks (excluding organizer "VaporVader", without skipping rank numbers)
+            let currentRank = 1;
+            rawData.forEach((player) => {
+                if ((player.account_name || '').toLowerCase() === 'vaporvader') {
+                    player.rank = null;
+                } else {
+                    player.rank = currentRank++;
+                }
             });
 
             updateDashboardStats();
@@ -432,7 +528,9 @@
                 let rankClass = "";
                 let rankBadge = `<span class="font-cinzel font-bold text-gray-400 text-base">#${player.rank}</span>`;
                 
-                if (player.rank === 1) {
+                if (player.rank === null) {
+                    rankBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-cinzel font-bold bg-slate-800 text-le-gold border border-le-gold/40 uppercase tracking-wider" title="Veranstalter (außer Konkurrenz)">Host</span>`;
+                } else if (player.rank === 1) {
                     rankClass = "rank-1";
                     rankBadge = `<div class="w-9 h-9 rounded-full bg-amber-500/20 border-2 border-le-gold flex items-center justify-center mx-auto shadow-gold-glow">
                                     <span class="font-cinzel font-black text-le-gold text-base">1</span>
